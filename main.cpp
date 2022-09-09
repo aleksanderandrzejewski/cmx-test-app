@@ -1,13 +1,27 @@
+#include <ctime>
 #include <iostream>
-#include <string>
+#include <cmw-cmx-cpp/ProcessComponent.h>
+#include <cmw-cmx-cpp/Component.h>
 
-using namespace std;
+using namespace cmw::cmx;
 
-int main() {
-    cout << "Hello World\n";
-    cout << "Input: ";
-    string data;
-    getline(cin, data);
-    cout << "Output: " << data << "\n\n";
-    return 0;
+int main()
+{
+    ProcessComponent::update();
+
+    ComponentPtr component = Component::create("stats");
+    CmxInt64 metr_test = component->newInt64("test");
+
+    std::cout << "Enter loop" << std::endl;
+    int i=0;
+    while (true)
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            metr_test = i;  // update metric
+            ProcessComponent::update(); // update process metrics
+            usleep(1000000);
+            if (i % 10 == 0) std::cout << i << std::endl;
+        }
+    }
 }
