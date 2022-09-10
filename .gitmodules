@@ -1,0 +1,3 @@
+[submodule ".devcontainer/cmw-cmx"]
+	path = .devcontainer/cmw-cmx
+	url = https://gitlab.cern.ch/cmx/cmw-cmx.git
