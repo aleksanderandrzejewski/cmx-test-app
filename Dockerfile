@@ -15,4 +15,4 @@ FROM --platform=linux/amd64 centos:centos7 as run
 COPY --from=build /usr/local/ /usr/local/
 COPY --from=build /opt/app-root/src/cmw-cmx/tools/cmw-cmx-reader /opt/app-root/src/cmw-cmx/tools/cmw-cmx-dumper /opt/app-root/src/cmw-cmx/tools/cmw-cmx-control ./
 COPY --from=build /opt/app-root/src/build/main ./main
-CMD ["./main"]
+ENTRYPOINT ["./main"]
