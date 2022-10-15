@@ -17,7 +17,23 @@ int main(int argc, char *argv[])
         instance_name = "cmx_test_app";
     }
 
-    ProcessComponent::update();
+    bool process_component = true;
+    if (argc > 2)
+    {
+        if (std::string(argv[2]) == "process_component=false")
+        {
+            process_component = false;
+        }
+        else if (std::string(argv[2]) == "process_component=true")
+        {
+            process_component = true;
+        }
+        else
+        {
+            std::cout << "Invalid argument: " << argv[2] << std::endl;
+            return 1;
+        }
+    }
 
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -44,7 +60,10 @@ int main(int argc, char *argv[])
                 test_gauge1 = test_gauge1_tmp;
             }
 
-            ProcessComponent::update();
+            if (process_component)
+            {
+                ProcessComponent::update();
+            }
             
             if (i % 10 == 0)
                 std::cout << i << std::endl;
