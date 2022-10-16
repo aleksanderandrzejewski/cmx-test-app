@@ -35,6 +35,25 @@ int main(int argc, char *argv[])
         }
     }
 
+    bool second_component = true;
+    if (argc > 3)
+    {
+        if (std::string(argv[3]) == "second_component=false")
+        {
+            second_component = false;
+        }
+        else if (std::string(argv[3]) == "second_component=true")
+        {
+            second_component = true;
+        }
+        else
+        {
+            std::cout << "Invalid argument: " << argv[3] << std::endl;
+            return 1;
+        }
+    }
+
+
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distr(1,10);
@@ -44,6 +63,10 @@ int main(int argc, char *argv[])
     CmxInt64 test_counter1 = component->newInt64("test_counter1");
     CmxInt64 test_counter2 = component->newInt64("test_counter2");
     CmxInt64 test_gauge1 = component->newInt64("test_gauge1");
+
+    ComponentPtr component2 = Component::create(instance_name + "_second_component");
+    CmxFloat64 test_gauge2 = component2->newFloat64("test_gauge2");
+    CmxBool test_bool = component2->newBool("test_bool");
 
     std::cout << "Enter loop" << std::endl;
     int i = 0;
@@ -58,6 +81,22 @@ int main(int argc, char *argv[])
             if (test_gauge1_tmp <= 100 and test_gauge1_tmp>=0)
             {
                 test_gauge1 = test_gauge1_tmp;
+            }
+
+            float test_gauge2_tmp = test_gauge2 / distr(rng);
+            if (test_gauge2_tmp < 0.1)
+            {
+                test_gauge2 = 100.0;
+                test_bool = true;
+            }
+            else if (test_gauge2_tmp < 0.2)
+            {
+                test_gauge2 = 50.0;
+                test_bool = false;
+            }
+            else
+            {
+                test_gauge2 = test_gauge2_tmp;
             }
 
             if (process_component)
