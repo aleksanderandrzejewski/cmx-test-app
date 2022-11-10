@@ -53,6 +53,15 @@ int main(int argc, char *argv[])
         }
     }
 
+    std::string metric_name = "sample_metric";
+    if (argc > 4)
+    {
+        std::string metric_name_arg = std::string(argv[4]);
+        if (metric_name_arg.size() > 0)
+        {
+            metric_name = metric_name_arg;
+        }
+    }
 
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -67,6 +76,10 @@ int main(int argc, char *argv[])
     ComponentPtr component2 = Component::create(instance_name + "_second_component");
     CmxFloat64 test_gauge2 = component2->newFloat64("test_gauge2");
     CmxBool test_bool = component2->newBool("test_bool");
+
+    ComponentPtr component3 = Component::create(instance_name + "metric_name_test");
+    CmxFloat64 test_gauge3 = component3->newFloat64(metric_name);
+    test_gauge3 = 0;
 
     std::cout << "Enter loop" << std::endl;
     int i = 0;
