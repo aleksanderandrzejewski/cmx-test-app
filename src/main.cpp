@@ -10,6 +10,9 @@ using namespace cmw::cmx;
 int main(int argc, char *argv[])
 {
     std::string instance_name;
+    std::string string1_value;
+    std::string string2_value;
+
     if (argc > 1)
     {
         instance_name = argv[1];
@@ -35,32 +38,28 @@ int main(int argc, char *argv[])
         }
     }
 
-    bool second_component = true;
+    std::string metric_name = "sample_metric";
     if (argc > 3)
     {
-        if (std::string(argv[3]) == "second_component=false")
-        {
-            second_component = false;
-        }
-        else if (std::string(argv[3]) == "second_component=true")
-        {
-            second_component = true;
-        }
-        else
-        {
-            std::cout << "Invalid argument: " << argv[3] << std::endl;
-            return 1;
-        }
-    }
-
-    std::string metric_name = "sample_metric";
-    if (argc > 4)
-    {
-        std::string metric_name_arg = std::string(argv[4]);
+        std::string metric_name_arg = std::string(argv[3]);
         if (metric_name_arg.size() > 0)
         {
             metric_name = metric_name_arg;
         }
+    }
+
+    if (argc > 4)
+    {
+        string1_value = argv[4];
+    } else {
+        string1_value = "string1_value";
+    }
+
+    if (argc > 5)
+    {
+        string2_value = argv[5];
+    } else {
+        string2_value = "string2_value";
     }
 
     std::random_device dev;
@@ -76,10 +75,14 @@ int main(int argc, char *argv[])
     ComponentPtr component2 = Component::create(instance_name + "_second_component");
     CmxFloat64 test_gauge2 = component2->newFloat64("test_gauge2");
     CmxBool test_bool = component2->newBool("test_bool");
+    CmxString test_string1 = component2->newString("prometheus_labels", 100);
+    CmxString test_string2 = component2->newString("test_string2", 40);
 
     ComponentPtr component3 = Component::create(instance_name + "metric_name_test");
     CmxFloat64 test_gauge3 = component3->newFloat64(metric_name);
-    test_gauge3 = 0;
+
+    test_string1=string1_value;
+    test_string2=string2_value;
 
     std::cout << "Enter loop" << std::endl;
     int i = 0;
@@ -111,6 +114,8 @@ int main(int argc, char *argv[])
             {
                 test_gauge2 = test_gauge2_tmp;
             }
+
+            test_gauge3 = 0;
 
             if (process_component)
             {
